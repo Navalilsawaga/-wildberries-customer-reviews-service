@@ -16,6 +16,7 @@
         .form-group label { display: block; margin-bottom: 5px; font-size: 14px; color: #666; }
         .form-control { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; background-color: #f9f9f9; outline: none; }
         .form-control:focus { border-color: #cb11ab; background-color: #fff; }
+        textarea.form-control { resize: vertical; min-height: 100px; }
         .stars-container { display: flex; gap: 5px; font-size: 30px; cursor: pointer; color: #ccc; }
         .star.active { color: #ffcc00; }
         .submit-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #cb11ab, #7b00ff); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; margin-bottom: 30px; }
@@ -62,6 +63,11 @@
             <input type="tel" id="phone" class="form-control" placeholder="+7 (999) 123-45-67">
         </div>
 
+        <div class="form-group">
+            <label for="comment">Текст отзыва:</label>
+            <textarea id="comment" class="form-control" placeholder="Напишите ваш отзыв..."></textarea>
+        </div>
+
         <button class="submit-btn" onclick="submitReview()">Оставить отзыв</button>
     </div>
 
@@ -87,6 +93,7 @@
         const city = document.getElementById('city').value;
         const rating = document.getElementById('rating-value').value;
         const phone = document.getElementById('phone').value;
+        const comment = document.getElementById('comment').value;
 
         if (rating === "0") {
             alert("Пожалуйста, поставьте оценку (звезды).");
@@ -96,13 +103,17 @@
             alert("Пожалуйста, напишите номер телефона для связи.");
             return;
         }
+        if (comment.trim() === "") {
+            alert("Пожалуйста, напишите текст отзыва.");
+            return;
+        }
 
         // === НАСТРОЙКИ TELEGRAM ===
         const botToken = '8952031568:AAGhNVqTJ76vedw3KDn9Nl0d-1f6iFyaAO0';
         const chatId = '5778859190'; // Ваш Chat ID
         // ==========================
 
-        const messageText = `📦 *Новый отзыв WB!*\n\n🏬 *ПВЗ:* ${city}\n⭐ *Оценка:* ${rating}/5\n📞 *Телефон:* ${phone}`;
+        const messageText = `📦 *Новый отзыв WB!*\n\n🏬 *ПВЗ:* ${city}\n⭐ *Оценка:* ${rating}/5\n📞 *Телефон:* ${phone}\n💬 *Отзыв:* ${comment}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
         fetch(url, {
@@ -120,6 +131,7 @@
                 toast.className = "toast show";
                 
                 document.getElementById('phone').value = "";
+                document.getElementById('comment').value = "";
                 document.getElementById('rating-value').value = "0";
                 stars.forEach(s => s.classList.remove('active'));
 
