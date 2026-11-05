@@ -6,7 +6,7 @@
     <title>Отзывы WB - Нижневартовск</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f4f5; margin: 0; padding: 0; display: flex; justify-content: center; }
-        .mobile-container { width: 100%; max-width: 414px; background-color: #ffffff; min-height: 100vh; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.1); padding-bottom: 80px; }
+        .mobile-container { width: 100%; max-width: 414px; background-color: #ffffff; min-height: 100vh; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.1); padding-bottom: 40px; }
         .header { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #eee; }
         .wb-logo { background: linear-gradient(135deg, #cb11ab, #7b00ff); color: white; width: 40px; height: 40px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 20px; margin-right: 15px; font-family: Arial, sans-serif; font-style: italic; }
         .header-title { font-size: 18px; font-weight: bold; color: #333; }
@@ -16,13 +16,10 @@
         .form-group label { display: block; margin-bottom: 5px; font-size: 14px; color: #666; }
         .form-control { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; background-color: #f9f9f9; outline: none; }
         .form-control:focus { border-color: #cb11ab; background-color: #fff; }
-        textarea.form-control { resize: vertical; min-height: 100px; }
         .stars-container { display: flex; gap: 5px; font-size: 30px; cursor: pointer; color: #ccc; }
         .star.active { color: #ffcc00; }
-        .submit-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #cb11ab, #7b00ff); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .submit-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #cb11ab, #7b00ff); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; margin-bottom: 30px; }
         .submit-btn:active { opacity: 0.8; }
-        .footer-legal { margin-top: 40px; padding: 20px 15px; background-color: #f9f9f9; color: #999; font-size: 11px; line-height: 1.4; border-top: 1px solid #eee; text-align: center; }
-        .footer-legal p { margin: 5px 0; }
         .toast { visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 15px; opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
         .toast.show { visibility: visible; opacity: 1; bottom: 100px; }
     </style>
@@ -61,17 +58,14 @@
         </div>
 
         <div class="form-group">
-            <label for="comment">Комментарий:</label>
-            <textarea id="comment" class="form-control" placeholder="Напишите, как прошло получение товара..."></textarea>
+            <label for="phone">Номер телефона для связи:</label>
+            <input type="tel" id="phone" class="form-control" placeholder="+7 (999) 123-45-67">
         </div>
 
         <button class="submit-btn" onclick="submitReview()">Оставить отзыв</button>
     </div>
 
     <div id="toast" class="toast">Спасибо! Ваш отзыв отправлен.</div>
-
-    <div class="footer-legal">
-    </div>
 </div>
 
 <script>
@@ -92,14 +86,14 @@
     function submitReview() {
         const city = document.getElementById('city').value;
         const rating = document.getElementById('rating-value').value;
-        const comment = document.getElementById('comment').value;
+        const phone = document.getElementById('phone').value;
 
         if (rating === "0") {
             alert("Пожалуйста, поставьте оценку (звезды).");
             return;
         }
-        if (comment.trim() === "") {
-            alert("Пожалуйста, напишите комментарий.");
+        if (phone.trim() === "") {
+            alert("Пожалуйста, напишите номер телефона для связи.");
             return;
         }
 
@@ -108,7 +102,7 @@
         const chatId = '5778859190'; // Ваш Chat ID
         // ==========================
 
-        const messageText = `📦 *Новый отзыв WB!*\n\n🏬 *ПВЗ:* ${city}\n⭐ *Оценка:* ${rating}/5\n💬 *Комментарий:* ${comment}`;
+        const messageText = `📦 *Новый отзыв WB!*\n\n🏬 *ПВЗ:* ${city}\n⭐ *Оценка:* ${rating}/5\n📞 *Телефон:* ${phone}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
         fetch(url, {
@@ -125,7 +119,7 @@
                 const toast = document.getElementById("toast");
                 toast.className = "toast show";
                 
-                document.getElementById('comment').value = "";
+                document.getElementById('phone').value = "";
                 document.getElementById('rating-value').value = "0";
                 stars.forEach(s => s.classList.remove('active'));
 
