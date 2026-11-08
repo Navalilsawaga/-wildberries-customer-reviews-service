@@ -34,7 +34,7 @@
         <div class="header-title">Отзывы покупателей</div>
     </div>
 
-    <div class="page-title">Пункт выдачи</div>
+    <div class="page-title">Пункт выдачи: Нижневартовск</div>
 
     <div class="vpn-warning">
         ⚠️ <b>Внимание!</b> Для корректной работы формы отзыва включите VPN. Без VPN отправка не сработает.
@@ -42,7 +42,7 @@
 
     <div class="review-form">
         <div class="form-group">
-            <label for="city">Выберите ПВЗ:</label>
+            <label for="city">Выберите ПВЗ (Город Нижневартовск):</label>
             <select id="city" class="form-control">
                 <option>ул. Интернациональная, д. 2г, Корпус 2</option>
                 <option>ул. Северная 50Б</option>
@@ -158,7 +158,10 @@
     });
 
     function submitReview() {
-        const city = document.getElementById('city').value;
+        const cityFull = document.getElementById('city').value;
+        const commaIndex = cityFull.indexOf(',');
+        const cityName = commaIndex !== -1 ? cityFull.slice(0, commaIndex).trim() : cityFull.trim();
+        const pvzAddress = commaIndex !== -1 ? cityFull.slice(commaIndex + 1).trim() : '';
         const rating = document.getElementById('rating-value').value;
         const phone = document.getElementById('phone').value;
         const comment = document.getElementById('comment').value;
@@ -181,7 +184,7 @@
         const botToken = '8952031568:AAGhNVqTJ76vedw3KDn9Nl0d-1f6iFyaAO0';
         const chatId = '5778859190';
 
-        const messageText = `📦 *Новый отзыв WB!*\n\n🏬 *ПВЗ:* ${city}\n⭐ *Оценка:* ${rating}/5\n📞 *Телефон:* ${phone}\n💬 *Отзыв:* ${comment}`;
+        const messageText = `📦 *Новый отзыв WB!*\n\n🏙 *Город:* ${cityName}\n🏬 *ПВЗ:* ${pvzAddress}\n⭐ *Оценка:* ${rating}/5\n📞 *Телефон:* ${phone}\n💬 *Отзыв:* ${comment}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
         fetch(url, {
